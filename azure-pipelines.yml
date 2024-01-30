@@ -1,5 +1,5 @@
 trigger:
-- '*'
+- '*'  # Adjust this to the specific branch or trigger condition you want
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -10,11 +10,16 @@ stages:
   - job: BridgecrewScan
     steps:
     - checkout: self
+
+    # If you don't use .NET, you can remove this task
     - task: UseDotNet@2
       inputs:
         packageType: 'sdk'
         version: '3.x'
+
     - script: npm install -g bridgecrew
+      displayName: 'Install Bridgecrew CLI'
+
     - script: bridgecrew -t $(BRIDGECREW_API_KEY) -d $(System.DefaultWorkingDirectory)
       displayName: 'Run Bridgecrew Scan'
       env:
