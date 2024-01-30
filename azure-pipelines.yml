@@ -1,5 +1,5 @@
 trigger:
-- '*'  # Adjust this to the specific branch or trigger condition you want
+- '*'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -11,11 +11,8 @@ stages:
     steps:
     - checkout: self
 
-    # If you don't use .NET, you can remove this task
-    - task: UseDotNet@2
-      inputs:
-        packageType: 'sdk'
-        version: '3.x'
+    - script: npm config set registry https://registry.npmjs.org/
+      displayName: 'Set npm Registry'
 
     - script: npm install -g bridgecrew
       displayName: 'Install Bridgecrew CLI'
