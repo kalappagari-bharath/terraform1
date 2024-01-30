@@ -1,0 +1,21 @@
+trigger:
+- '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Scan
+  jobs:
+  - job: BridgecrewScan
+    steps:
+    - checkout: self
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '3.x'
+    - script: npm install -g bridgecrew
+    - script: bridgecrew -t $(BRIDGECREW_API_KEY) -d $(System.DefaultWorkingDirectory)
+      displayName: 'Run Bridgecrew Scan'
+      env:
+        BRIDGECREW_API_KEY: $(BRIDGECREW_API_KEY)
